@@ -1,10 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { pfoneBookSlice } from './pfoneBookSlice';
 
-const contacts = {
-  items: [],
-  filter: '',
-};
-
-export default configureStore({
-  reducer: { contacts },
+export const store = configureStore({
+  reducer: {
+    contacts: pfoneBookSlice.reducer,
+  },
 });

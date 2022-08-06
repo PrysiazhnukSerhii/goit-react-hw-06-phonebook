@@ -1,16 +1,30 @@
 import { DeleteButton } from './listContacts.styled';
 
-export function ListContacts({ filteredContacts, deletePhoneItem }) {
+import { useSelector, useDispatch } from 'react-redux';
+import { removeContact } from '../../redux/pfoneBookSlice';
+
+export function ListContacts() {
+  const dispatch = useDispatch();
+
+  let listContacts = useSelector(state => state.contacts.items);
+  const filtrName = useSelector(state => state.contacts.filter);
+
+  if (filtrName.length > 0) {
+    listContacts = listContacts.filter(information =>
+      information.name.toLowerCase().includes(filtrName.toLowerCase())
+    );
+  }
+
   return (
     <>
       <ul>
-        {filteredContacts().map(friend => {
+        {listContacts.map(({ id, name, number }) => {
           return (
-            <li key={friend.id}>
-              {friend.name}: {friend.number};
+            <li key={id}>
+              {name}: {number};
               <DeleteButton
                 onClick={() => {
-                  deletePhoneItem(friend.id);
+                  dispatch(removeContact(id));
                 }}
               >
                 Delete

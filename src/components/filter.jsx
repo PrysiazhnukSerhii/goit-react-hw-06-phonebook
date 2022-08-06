@@ -1,4 +1,8 @@
-export function Filter({ serchName }) {
+import { useDispatch } from 'react-redux';
+import { filterName } from '../redux/pfoneBookSlice';
+
+export function Filter() {
+  const dispatch = useDispatch();
   return (
     <form>
       <label>
@@ -6,7 +10,7 @@ export function Filter({ serchName }) {
         <input
           type="text"
           onChange={e => {
-            serchName(e.target.value);
+            dispatch(filterName(e.target.value));
           }}
         />
       </label>

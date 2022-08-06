@@ -1,28 +1,40 @@
-import { useState } from 'react';
 import { nanoid } from 'nanoid';
+import { useSelector, useDispatch } from 'react-redux';
+import { addNewContact } from '../../redux/pfoneBookSlice';
 import { BookForm, BookItem, BookButton } from './pfoneBook.styled';
 
-export function PhoneBookForm({ onSubmit }) {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+export function PhoneBookForm() {
+  const dispatch = useDispatch();
+  const listContacts = useSelector(state => state.contacts.items);
 
-  const reset = () => {
-    setName('');
-    setNumber('');
+  let nameContact = '';
+  let numberContact = '';
+
+  const reset = e => {
+    e.target[0].value = '';
+    e.target[1].value = '';
   };
 
   const onSubmitForm = e => {
     e.preventDefault();
 
+    let findedСoincidence = listContacts.find(evn => evn.name === nameContact);
+
+    if (findedСoincidence) {
+      alert(`${nameContact} is already in contacts`);
+      reset(e);
+      return;
+    }
+
     let contactInformation = {
-      name,
       id: nanoid(),
-      number,
+      name: nameContact,
+      number: numberContact,
     };
 
-    onSubmit(contactInformation, name);
+    dispatch(addNewContact(contactInformation));
 
-    reset();
+    reset(e);
   };
 
   return (
@@ -35,8 +47,7 @@ export function PhoneBookForm({ onSubmit }) {
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
-          onChange={e => setName(e.target.value)}
-          value={name}
+          onChange={e => (nameContact = e.target.value)}
         />
       </BookItem>
       <BookItem>
@@ -47,8 +58,7 @@ export function PhoneBookForm({ onSubmit }) {
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
-          onChange={e => setNumber(e.target.value)}
-          value={number}
+          onChange={e => (numberContact = e.target.value)}
         />
       </BookItem>
       <BookButton type="submit">Add contact</BookButton>
