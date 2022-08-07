@@ -10,7 +10,7 @@ export function PhoneBookForm() {
   let nameContact = '';
   let numberContact = '';
 
-  const reset = e => {
+  const resetInput = e => {
     e.target[0].value = '';
     e.target[1].value = '';
   };
@@ -22,7 +22,7 @@ export function PhoneBookForm() {
 
     if (findedСoincidence) {
       alert(`${nameContact} is already in contacts`);
-      reset(e);
+      resetInput(e);
       return;
     }
 
@@ -34,7 +34,7 @@ export function PhoneBookForm() {
 
     dispatch(addNewContact(contactInformation));
 
-    reset(e);
+    resetInput(e);
   };
 
   return (

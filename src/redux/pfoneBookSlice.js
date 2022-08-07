@@ -1,4 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 const startListContacts = [
   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
@@ -27,3 +29,15 @@ export const pfoneBookSlice = createSlice({
 
 export const { addNewContact, removeContact, filterName } =
   pfoneBookSlice.actions;
+
+//-------------------persist -----------
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['items'],
+};
+
+export const persistedReducer = persistReducer(
+  persistConfig,
+  pfoneBookSlice.reducer
+);
